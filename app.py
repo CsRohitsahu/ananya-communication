@@ -315,6 +315,27 @@ header {visibility: hidden;}
     .hero-title { font-size: 2rem; }
     .hero-tagline { font-size: 1rem; }
 }
+
+/* ── Sidebar Navigation Fix ── */
+[data-testid="stSidebar"] {
+    min-width: 220px !important;
+    max-width: 220px !important;
+}
+[data-testid="collapsedControl"] {
+    display: block !important;
+    visibility: visible !important;
+}
+[data-testid="stSidebar"] [data-testid="stRadio"] label {
+    display: block !important;
+    padding: 8px 12px !important;
+    margin: 4px 0 !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-size: 0.95rem !important;
+}
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
+    background: rgba(255,255,255,0.15) !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -355,7 +376,13 @@ with st.sidebar:
 
     page = st.radio(
         "Navigate",
-        ["🏠  Home", "🛠️  Services", "ℹ️  About Us", "📞  Contact"],
+        ["Home", "Services", "About Us", "Contact"],
+        format_func=lambda x: {
+            "Home":     "🏠  Home",
+            "Services": "🛠️  Services",
+            "About Us": "ℹ️  About Us",
+            "Contact":  "📞  Contact",
+        }[x],
         label_visibility="collapsed",
     )
 
@@ -369,7 +396,8 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # ── Routing ─────────────────────────────────────────────────
-selected = page.split("  ", 1)[1] if "  " in page else page
+# page is now a clean string: "Home", "Services", "About Us", "Contact"
+selected = page
 
 # ╔══════════════════════════════════════════════╗
 # ║                  HOME PAGE                   ║
